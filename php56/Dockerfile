@@ -83,9 +83,6 @@ RUN chmod +x /node_install.sh
 RUN /node_install.sh && \
     apt-get install -y nodejs
 
-# Yarn
-RUN npm install -g yarn
-
 # ZSH
 RUN git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
     && cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc \
