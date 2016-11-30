@@ -21,15 +21,15 @@ RUN apt-get install -y \
     php5 \
     php5-dev \
     php5-curl \
-    php5-imagick \
-    php5-curl \
+    php5-imagick
+RUN apt-get install -y \
     php5-intl \
     php5-geoip \
     php-mime-type \
-    php-pear
-RUN apt-get install -y \
+    php-pear \
     php5-mysql \
-    php5-odbc \
+    php5-odbc
+RUN apt-get install -y \
     php5-xdebug \
     php5-xcache \
     php5-memcache \
@@ -78,7 +78,9 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Node
-RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash - && \
+ADD docker/node_install.sh /node_install.sh
+RUN chmod +x /node_install.sh
+RUN /node_install.sh && \
     apt-get install -y nodejs
 
 # ZSH
