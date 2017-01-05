@@ -2,7 +2,7 @@ FROM php:7.1-fpm
 MAINTAINER Loïc Ambrosini <loic@1001pharmacies.com>
 
 ENV TERM=xterm
-ENV NGINX_VERSION 1.11.7-1~jessie
+ENV NGINX_VERSION 1.11.8-1~jessie
 
 ENV BUILD_PKGS \
         libmagickwand-dev \
