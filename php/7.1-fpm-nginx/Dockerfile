@@ -41,7 +41,9 @@ RUN docker-php-ext-install \
     pdo_mysql \
     intl \
     bcmath \
-    zip
+    mbstring \
+    zip \
+    sockets
 
 RUN docker-php-ext-enable \
     opcache \
