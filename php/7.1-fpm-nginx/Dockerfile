@@ -2,7 +2,6 @@ FROM php:7.1-fpm
 MAINTAINER Loïc Ambrosini <loic@1001pharmacies.com>
 
 ENV TERM=xterm
-ENV NGINX_VERSION 1.11.8-1~jessie
 
 ENV BUILD_PKGS \
         libmagickwand-dev \
@@ -17,7 +16,8 @@ RUN apt-get update && apt-get install  --no-install-recommends --no-install-sugg
     git \
     curl \
     make \
-    awscli
+    awscli \
+    zsh
 
 ## Nginx
 RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
@@ -25,7 +25,7 @@ RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC64107
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y \
 						ca-certificates \
-						nginx=${NGINX_VERSION} \
+						nginx \
 						nginx-module-xslt \
 						nginx-module-geoip \
 						nginx-module-image-filter \
@@ -68,6 +68,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
     && composer global require hirak/prestissimo \
     && rm -rf /tmp/* /var/tmp/*
 
+# ZSH
+RUN git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
+    && cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc \
+    && chsh -s /bin/zsh && \
+    echo "export TERM=xterm" >> ~/.zshrc && \
+    sed -i -E "s/^plugins=\((.*)\)$/plugins=(\1 git common-aliases composer phing symfony2)/" ~/.zshrc
+
+
 RUN echo Europe/Paris > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN chmod -R g+rwx /var/www/html
@@ -75,4 +83,7 @@ RUN umask 0007
 
 EXPOSE 80 443
 
-CMD ["supervisord"]
+ADD docker/start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD /start.sh
