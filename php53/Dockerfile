@@ -71,6 +71,8 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
 ADD docker/vhost /etc/apache2/sites-available/000-default.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    a2dissite default && \
+    a2ensite 000-default.conf && \
     a2enmod rewrite ssl vhost_alias && \
     mkdir /var/www/html && \
     mkdir /var/www/html/web && \
