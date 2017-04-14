@@ -58,6 +58,14 @@ RUN sed -i '1 a xdebug.remote_autostart=true' /etc/php5/mods-available/xdebug.in
     sed -i '1 a xdebug.var_display_max_depth=4' /etc/php5/mods-available/xdebug.ini && \
     sed -i '1 a xdebug.show_local_vars=1' /etc/php5/mods-available/xdebug.ini
 
+# BlackFire
+RUN cd /tmp && mkdir blackfire && cd blackfire \
+    && curl -A "Docker" -o blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/54 \
+    && tar zxpf blackfire-probe.tar.gz \
+    && mv blackfire-*.so `php -r "echo ini_get('extension_dir');"`/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > /etc/php5/cli/conf.d/blackfire.ini \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > /etc/php5/apache2/conf.d/blackfire.ini \
+    && rm -Rf /tmp/*
 
 # Configure PHP
 RUN sed -i 's/= E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED/= E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR/' /etc/php5/apache2/php.ini && \
