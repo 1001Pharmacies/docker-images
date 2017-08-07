@@ -16,7 +16,9 @@ RUN apt-get clean && apt-get update && apt-get install -y \
     make \
     zsh \
     mysql-client \
-    apache2.2-common
+    apache2.2-common \
+    nano \
+    vim
 RUN apt-get install -y \
     php5 \
     php5-dev \
