@@ -16,7 +16,9 @@ RUN apt-get clean && apt-get update && apt-get install -y \
     make \
     zsh \
     mysql-client \
-    apache2.2-common
+    apache2.2-common \
+    nano \
+    vim
 RUN apt-get install -y \
     php5 \
     php5-dev \
@@ -76,12 +78,6 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Node
-ADD docker/node_install.sh /node_install.sh
-RUN chmod +x /node_install.sh
-RUN /node_install.sh && \
-    apt-get install -y nodejs
 
 # ZSH
 RUN git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
