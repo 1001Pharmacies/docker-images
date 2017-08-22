@@ -30,7 +30,8 @@ RUN apt-get install -y \
     php-mime-type \
     php-pear \
     php5-mysql \
-    php5-odbc
+    php5-odbc \
+    php5-apcu
 RUN apt-get install -y \
     php5-xdebug \
     php5-xcache \
