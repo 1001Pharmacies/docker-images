@@ -9,7 +9,7 @@ ADD docker/gitignore /root/.gitignore_global
 RUN echo "export TERM=xterm" >> /etc/bash.bashrc
 
 # Install packages (multiple apt-get install due to debian http-redir error not yet fixed)
-RUN apt-get clean && apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     openssh-server \
     supervisor \
     git \
