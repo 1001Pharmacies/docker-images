@@ -1,0 +1,17 @@
+# install
+
+```
+docker pull 1001pharmadev/toggle-api
+docker run 1001pharmadev/toggle-api
+```
+
+# configure
+
+Environment vars :
+
+```
+TOGGLE__DEBUG="true" \
+TOGGLE__ALLOWED_ORIGINS='["*"]' \
+TOGGLE__REDIS_DSN="tcp://redis:6379" \
+TOGGLE__PREFIX="feature_toggle"
+```
