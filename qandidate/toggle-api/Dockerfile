@@ -1,15 +1,27 @@
-FROM php:7.0-apache
+FROM php:5.6.31-apache
 
 RUN apt-get update && apt-get install -y \
+        make \
+        build-essential \
+        gcc \
+        g++ \
         curl \
         git \
         zlib1g-dev \
         libicu-dev \
+        libhiredis-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install zip pdo_mysql intl
 
-RUN git clone https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis \
-    && docker-php-ext-install redis
+RUN echo "date.timezone=Europe/Paris" > /usr/local/etc/php/php.ini
+
+RUN git clone https://github.com/nrk/phpiredis.git && \
+    cd phpiredis && \
+    phpize && \
+    ./configure --enable-phpiredis && \
+    make && make install && \
+    cd .. && rm -rf phpiredis && \
+    echo "extension=phpiredis.so" > /usr/local/etc/php/conf.d/docker-php-ext-phpiredis.ini
 
 RUN curl -o /usr/local/bin/composer https://getcomposer.org/composer.phar && chmod +x /usr/local/bin/composer
 
