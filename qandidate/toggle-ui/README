@@ -1,0 +1,14 @@
+# install
+
+```
+docker pull 1001pharmadev/toggle-ui
+docker run 1001pharmadev/toggle-ui
+```
+
+# configure
+
+Environment vars :
+
+```
+TOGGLE__API_BASE_URL="http://127.0.0.1:8080"
+```
