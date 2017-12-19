@@ -46,10 +46,17 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Php config (fix .so directories)
 RUN sed -i 's/memory_limit = .*/memory_limit = '512M'/' /etc/php5/apache2/php.ini && \
     sed -i 's/memory_limit = .*/memory_limit = '512M'/' /etc/php5/cli/php.ini && \
-    sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/cli/php.ini &&\
-    sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/apache2/php.ini &&\
+    sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/cli/php.ini && \
+    sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/apache2/php.ini && \
+    echo "realpath_cache_size = 4096K" >> /etc/php5/cli/php.ini &&\
+    echo "realpath_cache_size = 4096K" >> /etc/php5/apache2/php.ini && \
+    echo "realpath_cache_ttl = 600" >> /etc/php5/cli/php.ini &&\
+    echo "realpath_cache_ttl = 600" >> /etc/php5/apache2/php.ini && \
     echo "opcache.max_accelerated_files = 20000" >> /etc/php5/cli/php.ini &&\
     echo "opcache.max_accelerated_files = 20000" >> /etc/php5/apache2/php.ini
+
+# Configure xCache extension
+RUN sed -i 's/xcache.size  =                16M.*/xcache.size = '128M'/' /etc/php5/mods-available/xcache.ini
 
 # Install && Configure Blackfire extension
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
