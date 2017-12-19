@@ -18,7 +18,9 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y \
     curl \
     zsh \
     mysql-client \
-    apache2.2-common
+    apache2.2-common \
+    nano \
+    vim
 RUN apt-get install -y \
     php5 \
     php5-dev \
@@ -44,7 +46,9 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN sed -i 's/memory_limit = .*/memory_limit = '512M'/' /etc/php5/apache2/php.ini && \
     sed -i 's/memory_limit = .*/memory_limit = '512M'/' /etc/php5/cli/php.ini && \
     sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/cli/php.ini &&\
-    sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/apache2/php.ini
+    sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/apache2/php.ini &&\
+    echo "opcache.max_accelerated_files = 20000" >> /etc/php5/cli/php.ini &&\
+    echo "opcache.max_accelerated_files = 20000" >> /etc/php5/apache2/php.ini
 
 # Configure xDebug extension
 RUN sed -i '1 a xdebug.remote_autostart=true' /etc/php5/mods-available/xdebug.ini && \
@@ -55,7 +59,7 @@ RUN sed -i '1 a xdebug.remote_autostart=true' /etc/php5/mods-available/xdebug.in
     sed -i '1 a xdebug.collect_params=4' /etc/php5/mods-available/xdebug.ini && \
     sed -i '1 a xdebug.var_display_max_children=128' /etc/php5/mods-available/xdebug.ini && \
     sed -i '1 a xdebug.var_display_max_data=1024' /etc/php5/mods-available/xdebug.ini && \
-    sed -i '1 a xdebug.var_display_max_depth=4' /etc/php5/mods-available/xdebug.ini && \
+    sed -i '1 a xdebug.var_display_max_depth=5' /etc/php5/mods-available/xdebug.ini && \
     sed -i '1 a xdebug.show_local_vars=1' /etc/php5/mods-available/xdebug.ini
 
 # BlackFire
