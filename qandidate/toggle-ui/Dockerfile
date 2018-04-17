@@ -19,7 +19,7 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 WORKDIR /var/www/html
 
-RUN git clone https://github.com/iamluc/qandidate-toggle-ui.git .
+RUN git clone https://github.com/1001Pharmacies/qandidate-toggle-ui.git .
 
 RUN npm install
 RUN npm install -g bower
