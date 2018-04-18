@@ -34,7 +34,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 WORKDIR /var/www/html
 
-RUN git clone https://github.com/qandidate-labs/qandidate-toggle-api.git .
+RUN git clone https://github.com/1001Pharmacies/qandidate-toggle-api.git .
 
 ADD .env.dist .
 RUN cp .env.dist .env \
