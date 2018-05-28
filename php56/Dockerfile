@@ -30,12 +30,10 @@ RUN apt-get install -y \
     php-mime-type \
     php-pear \
     php5-mysql \
-    php5-odbc \
     php5-apcu
 RUN apt-get install -y \
     php5-xdebug \
-    php5-xcache \
-    php5-memcache \
+    php5-memcached \
     php5-redis \
     php5-twig
 
@@ -48,15 +46,18 @@ RUN sed -i 's/memory_limit = .*/memory_limit = '512M'/' /etc/php5/apache2/php.in
     sed -i 's/memory_limit = .*/memory_limit = '512M'/' /etc/php5/cli/php.ini && \
     sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/cli/php.ini && \
     sed -i "s/^;date.timezone =$/date.timezone = \"Europe\/Paris\"/" /etc/php5/apache2/php.ini && \
+    sed -i 's/max_execution_time = .*/max_execution_time = 300/' /etc/php5/apache2/php.ini && \
+    sed -i 's/max_execution_time = .*/max_execution_time = 300/' /etc/php5/cli/php.ini && \
+    sed -i 's/apc.enable_cli = .*/apc.enable_cli = 1/' /etc/php5/apache2/php.ini && \
+    sed -i 's/apc.enable_cli = .*/apc.enable_cli = 1/' /etc/php5/cli/php.ini && \
+    sed -i 's/session.auto_start = .*/session.auto_start = Off/' /etc/php5/apache2/php.ini && \
+    sed -i 's/session.auto_start = .*/session.auto_start = Off/' /etc/php5/cli/php.ini && \
     echo "realpath_cache_size = 4096K" >> /etc/php5/cli/php.ini &&\
     echo "realpath_cache_size = 4096K" >> /etc/php5/apache2/php.ini && \
     echo "realpath_cache_ttl = 600" >> /etc/php5/cli/php.ini &&\
     echo "realpath_cache_ttl = 600" >> /etc/php5/apache2/php.ini && \
     echo "opcache.max_accelerated_files = 20000" >> /etc/php5/cli/php.ini &&\
     echo "opcache.max_accelerated_files = 20000" >> /etc/php5/apache2/php.ini
-
-# Configure xCache extension
-RUN sed -i 's/xcache.size  =                16M.*/xcache.size = '128M'/' /etc/php5/mods-available/xcache.ini
 
 # Install && Configure Blackfire extension
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
@@ -91,15 +92,10 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     mkdir /var/www/html/web && \
     /etc/init.d/apache2 restart
 
-# Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# ZSH
-RUN git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
-    && cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc \
-    && chsh -s /bin/zsh && \
-    echo "export TERM=xterm" >> ~/.zshrc && \
-    sed -i -E "s/^plugins=\((.*)\)$/plugins=(\1 git common-aliases composer phing symfony2)/" ~/.zshrc
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative \
+	&& composer clear-cache
 
 EXPOSE 22 80
 

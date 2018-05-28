@@ -1,8 +1,8 @@
 #! /bin/bash
 
 if [ -d "/var/www/html/app/cache" ]; then
-  chown -R www-data:root /var/www/html/app/cache
-  chown -R www-data:root /var/www/html/app/logs
+  chown -R www-data /var/www/html/app/cache
+  chown -R www-data /var/www/html/app/logs
   chmod 777 /var/www/html/app/cache
   chmod 777 /var/www/html/app/logs
 fi
