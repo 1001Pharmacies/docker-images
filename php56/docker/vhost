@@ -10,8 +10,8 @@
   </Directory>
 
   ## Logging
-  ErrorLog ${APACHE_LOG_DIR}/error.log
-  CustomLog ${APACHE_LOG_DIR}/access.log combined
+  ErrorLog /dev/stdout
+  CustomLog /dev/stdout combined
   ServerSignature Off
 
   ## SetEnv/SetEnvIf for environment variables
