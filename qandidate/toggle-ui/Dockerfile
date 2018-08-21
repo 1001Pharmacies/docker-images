@@ -1,11 +1,13 @@
 FROM php:7.0-apache
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -fy \
         curl \
         git \
+        gnupg \
         libicu-dev \
-        npm \
-        nodejs-legacy \
+ && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+ && apt-get -fy install \
+        nodejs \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install pdo_mysql intl
 
