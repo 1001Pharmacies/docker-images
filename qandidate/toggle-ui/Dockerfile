@@ -42,3 +42,5 @@ ENV TOGGLE__API_BASE_URL="http://127.0.0.1:8080"
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["apache2-foreground"]
