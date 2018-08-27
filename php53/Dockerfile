@@ -118,6 +118,8 @@ RUN git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
     echo "export TERM=xterm" >> ~/.zshrc && \
     sed -i -E "s/^plugins=\((.*)\)$/plugins=(\1 git common-aliases composer phing symfony2)/" ~/.zshrc
 
+COPY docker/ssh_config /etc/ssh
+
 EXPOSE 22 80
 
 # Clean docker image
