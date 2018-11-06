@@ -98,7 +98,7 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     /etc/init.d/apache2 restart
 
 # Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet --version=1.7.2
 
 # Node
 ADD docker/nodeInstall.sh /nodeInstall.sh
